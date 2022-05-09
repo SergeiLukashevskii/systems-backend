@@ -12,7 +12,7 @@ class UserController {
       const { email, password } = req.body
       const user = new User({ email, password })
       const { password: pass, ...data } = user.toObject()
-      const token = generateJwt(data._id, data.email, data.role)
+      const token = generateJwt(data.id, data.email, data.role)
       await user.save()
       return res.json({ token, user: data })
     } catch (e) {
@@ -37,7 +37,7 @@ class UserController {
         return next(ApiError.badRequest('Указан неверный пароль'))
       }
       const data = user.toObject()
-      const token = generateJwt(data._id, data.email, data.role)
+      const token = generateJwt(data.id, data.email, data.role)
       return res.json({ token, user: data })
     } catch (e) {
       console.error(e)
@@ -45,11 +45,18 @@ class UserController {
     }
   }
 
-  async getUser(req, res) {
-    const user = await User.findById(req.user.id)
-    const data = user.toObject()
-    const { _id, email } = data
-    return res.json({ id: _id, email: email })
+  async getUser(req, res, next) {
+    try {
+      const user = await User.findById(req.user.id)
+      if (!user) {
+        return next(ApiError.unauthorized('Сессия завершена, авторизуйтесь заново'))
+      }
+      const data = user.toObject()
+      return res.json({ user: data })
+    } catch (e) {
+      console.error(e)
+      next(ApiError.internal(e))
+    }
   }
 }
 

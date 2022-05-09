@@ -25,6 +25,8 @@ const schema = new mongoose.Schema({
 schema.set('toObject', {
   transform: function (doc, ret) {
     delete ret.__v
+    ret.id = doc._id
+    delete ret._id
   }
 })
 

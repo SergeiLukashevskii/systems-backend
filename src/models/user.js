@@ -62,6 +62,8 @@ schema.set('toObject', {
   transform: function (doc, ret) {
     delete ret.__v
     delete ret.password
+    ret.id = doc._id
+    delete ret._id
   }
 })
 
