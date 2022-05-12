@@ -16,7 +16,7 @@ const schema = new mongoose.Schema({
     required: true,
     type: String
   },
-  exersices: {
+  exercises: {
     type: mongoose.Schema.Types.Mixed,
     required: true
   }

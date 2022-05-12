@@ -2,11 +2,11 @@ const System = require('../models/system')
 class SystemController {
   async createSystem(req, res, next) {
     try {
-      const { name, exersices } = req.body
+      const { name, exercises } = req.body
       const system = await new System({
         userId: req.user.id,
-        daysCount: Object.keys(exersices).length,
-        exersices: exersices,
+        daysCount: Object.keys(exercises).length,
+        exercises: exercises,
         name: name
       })
       await system.save()
